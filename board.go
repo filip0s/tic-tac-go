@@ -34,3 +34,7 @@ func (b *Board) print() {
 		fmt.Printf("\n")
 	}
 }
+
+func (b *Board) insert(position Coords, player Player) {
+	b.matrix[position.row][position.col] = player.playerCharacter
+}
