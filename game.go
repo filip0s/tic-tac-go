@@ -42,7 +42,7 @@ func (g *Game) handleInput() {
 		g.handleInput()
 	}
 
-	err = input.check()
+	err = input.checkCoordsDomain()
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%s", err)
 		g.handleInput()
