@@ -26,15 +26,29 @@ func (b *Board) create() {
 	}
 }
 
+func (b *Board) printRowDivider() {
+	lengthOfLine := 4*cellsPerSide + 1
+
+	for i := 0; i < lengthOfLine; i++ {
+		fmt.Printf("-")
+	}
+	fmt.Printf("\n")
+}
+
 func (b *Board) print() {
+
+	b.printRowDivider()
 	for i := 0; i < cellsPerSide; i++ {
 		for j := 0; j < cellsPerSide; j++ {
-			fmt.Printf("%s", b.matrix[i][j])
+			fmt.Printf("| %s ", b.matrix[i][j])
 		}
-		fmt.Printf("\n")
+		fmt.Printf("|\n")
+		b.printRowDivider()
 	}
 }
 
 func (b *Board) insert(position Coords, player Player) {
 	b.matrix[position.row][position.col] = player.playerCharacter
 }
+
+//TODO: Check if cell where player is trying to insert is empty
