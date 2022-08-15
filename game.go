@@ -24,9 +24,10 @@ func (g *Game) create() {
 func (g *Game) switchPlayers() {
 	if g.currentPlayer == g.player1 {
 		g.currentPlayer = g.player2
+	} else {
+		g.currentPlayer = g.player1
 	}
 
-	g.currentPlayer = g.player1
 }
 
 // Collects input from one of players, checks it and tries to put Player's
@@ -38,7 +39,7 @@ func (g *Game) handleInput() {
 
 	_, err := fmt.Scanf("%d %d \n", &input.row, &input.col)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Please enter valid number of row and column")
+		_, _ = fmt.Fprintf(os.Stderr, "Please enter valid number of row and column.\n") // Rewrite this with the use of errors.New()
 		g.handleInput()
 	}
 
@@ -55,7 +56,7 @@ func (g *Game) play() {
 	const maximumRounds = cellsPerSide * cellsPerSide
 	var roundCounter = 0
 
-	for roundCounter < maximumRounds || !g.isOver {
+	for roundCounter < maximumRounds && !g.isOver {
 		// TODO: Implement game logic
 		g.playingBoard.print()
 
@@ -63,5 +64,4 @@ func (g *Game) play() {
 		g.switchPlayers()
 		roundCounter++
 	}
-
 }
