@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
 type Game struct {
@@ -35,20 +34,22 @@ func (g *Game) switchPlayers() {
 func (g *Game) handleInput() {
 	var input Coords
 
-	fmt.Printf("[Player %s] enter row and column (0 - %d): ", g.currentPlayer.playerCharacter, cellsPerSide-1)
+	fmt.Printf("[Player %s] enter ROW and COLUMN (0 - %d): ", g.currentPlayer.playerCharacter, cellsPerSide-1)
 
-	_, err := fmt.Scanf("%d %d \n", &input.row, &input.col)
+	_, err := fmt.Scan(&input.row, &input.col)
+
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Please enter valid number of row and column.\n") // Rewrite this with the use of errors.New()
+		fmt.Println(err)
 		g.handleInput()
+		return
 	}
 
-	err = input.checkCoordsDomain()
+	err = g.playingBoard.check(input)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "%s", err)
+		fmt.Println(err)
 		g.handleInput()
+		return
 	}
-
 	g.playingBoard.insert(input, g.currentPlayer)
 }
 
