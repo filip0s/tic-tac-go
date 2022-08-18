@@ -51,6 +51,66 @@ func (g *Game) handleInput() {
 		return
 	}
 	g.playingBoard.insert(input, g.currentPlayer)
+	g.lastPosition = input
+}
+
+func adjustStartPos(cell int) int {
+	if cell < 0 {
+		return 0
+	}
+	return cell
+}
+
+func adjustEndPos(cell int) int {
+	maxPosition := cellsPerSide - 1
+	if cell >= maxPosition {
+		return maxPosition
+	}
+	return cell
+}
+
+// Checks if there are 3 characters in row, where was the latest insertion
+func (g *Game) checkHorizontal() bool {
+	var (
+		col      = g.lastPosition.col
+		startRow = adjustStartPos(g.lastPosition.row - 1)
+		endRow   = adjustEndPos(g.lastPosition.row + 1)
+		isWin    = true
+	)
+
+	for row := startRow; row <= endRow; row++ {
+		isWin = isWin && (g.playingBoard.matrix[row][col] == g.currentPlayer.playerCharacter)
+	}
+
+	return isWin
+}
+
+// Check if there are 3 same characters in vertical orientation (column) around the latest insertion
+func (g *Game) checkVertical() bool {
+	var (
+		row      = g.lastPosition.row
+		startCol = adjustStartPos(g.lastPosition.col - 1)
+		endCol   = adjustEndPos(g.lastPosition.col + 1)
+		isWin    = true
+	)
+
+	for col := startCol; col <= endCol; col++ {
+		isWin = isWin && (g.playingBoard.matrix[row][col] == g.currentPlayer.playerCharacter)
+	}
+
+	return isWin
+}
+
+func (g *Game) checkMainDiagonal() bool {
+	return false
+}
+
+func (g *Game) checkSideDiagonal() bool {
+	return false
+}
+
+func (g *Game) checkWin() bool {
+	return g.checkHorizontal() || g.checkVertical() || g.checkMainDiagonal() || g.checkSideDiagonal()
 }
 
 func (g *Game) play() {
@@ -63,6 +123,8 @@ func (g *Game) play() {
 
 		g.handleInput()
 		g.switchPlayers()
+
+		//TODO: Implement check for win
 		roundCounter++
 	}
 }
