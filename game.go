@@ -32,7 +32,7 @@ func (g *Game) switchPlayers() {
 // Collects input from one of players, checks it and tries to put Player's
 // character on the Board based on the input
 func (g *Game) handleInput() {
-	var input Coords
+	var input Position
 
 	fmt.Printf("[Player %s] enter ROW and COLUMN (0 - %d): ", g.currentPlayer.playerCharacter, cellsPerSide-1)
 

@@ -50,13 +50,13 @@ func (b *Board) print() {
 	}
 }
 
-func (b *Board) insert(pos Coords, player Player) {
+func (b *Board) insert(pos Position, player Player) {
 	b.matrix[pos.row][pos.col] = player.playerCharacter
 }
 
 // Checks validity of coordinates. Method tests if coordinates are on the playing
 // board and if the cell is empty.
-func (b *Board) check(pos Coords) error {
+func (b *Board) check(pos Position) error {
 	err := checkCoordsDomain(pos)
 	if err != nil {
 		return err
@@ -72,7 +72,7 @@ func (b *Board) check(pos Coords) error {
 
 // Checks if the coordinates in struct are in the 0 to cellsPerSide-1 range.
 // Returns error in case, that one of the coordinates is outside the range, otherwise returns nil.
-func checkCoordsDomain(pos Coords) error {
+func checkCoordsDomain(pos Position) error {
 	var maximumPosition = cellsPerSide - 1
 
 	if pos.row > maximumPosition || pos.col > maximumPosition || pos.row < 0 || pos.col < 0 {
@@ -84,7 +84,7 @@ func checkCoordsDomain(pos Coords) error {
 }
 
 // Checks if coordinates passed as parameter are empty.
-func (b *Board) checkEmpty(pos Coords) error {
+func (b *Board) checkEmpty(pos Position) error {
 	if b.matrix[pos.row][pos.col] != empty {
 		return errors.New("inserting into full cell")
 	}
