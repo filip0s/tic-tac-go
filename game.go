@@ -78,62 +78,124 @@ func adjustEndPos(cell int) int {
 	return cell
 }
 
+// Performs a check if there was certain number (`goal` value) of current player's
+// character in row inside the provided slice. Returns boolean value depending on
+// if the goal was reached.
+func (g *Game) checkBoardSlice(checkedSlice []Tile) bool {
+	var (
+		goal          = 3
+		isGoalReached = false
+		counter       = 0
+	)
+
+	for _, val := range checkedSlice {
+		if val == g.currentPlayer.playerCharacter {
+			counter++
+			if counter == goal {
+				isGoalReached = true
+				break
+			}
+		} else {
+			counter = 0
+		}
+
+	}
+
+	return isGoalReached
+}
+
 // Checks if there are 3 characters in row, where was the latest insertion
 func (g *Game) checkHorizontal() bool {
 	var (
-		col      = g.lastPosition.col
-		startRow = adjustStartPos(g.lastPosition.row - 1)
-		endRow   = adjustEndPos(g.lastPosition.row + 1)
-		isWin    = true
-	)
-
-	for row := startRow; row <= endRow; row++ {
-		isWin = isWin && (g.playingBoard.matrix[row][col] == g.currentPlayer.playerCharacter)
-	}
-
-	return isWin
-}
-
-// Check if there are 3 same characters in vertical orientation (column) around the latest insertion
-func (g *Game) checkVertical() bool {
-	var (
-		row      = g.lastPosition.row
-		startCol = adjustStartPos(g.lastPosition.col - 1)
-		endCol   = adjustEndPos(g.lastPosition.col + 1)
-		isWin    = true
+		row         = g.lastPosition.row
+		startCol    = adjustStartPos(g.lastPosition.col - 2)
+		endCol      = adjustEndPos(g.lastPosition.col + 2)
+		checkedPart []Tile
 	)
 
 	for col := startCol; col <= endCol; col++ {
-		isWin = isWin && (g.playingBoard.matrix[row][col] == g.currentPlayer.playerCharacter)
+		checkedPart = append(checkedPart, g.playingBoard.matrix[row][col])
 	}
 
-	return isWin
+	return g.checkBoardSlice(checkedPart)
+}
+
+// Checks if there are 3 same characters in vertical orientation (column) around the latest insertion
+func (g *Game) checkVertical() bool {
+	var (
+		col         = g.lastPosition.col
+		startRow    = adjustStartPos(g.lastPosition.row - 2)
+		endRow      = adjustEndPos(g.lastPosition.row + 2)
+		checkedPart []Tile
+	)
+
+	for row := startRow; row <= endRow; row++ {
+		checkedPart = append(checkedPart, g.playingBoard.matrix[row][col])
+	}
+
+	return g.checkBoardSlice(checkedPart)
 }
 
 func (g *Game) checkMainDiagonal() bool {
-	return false
+	var (
+		startRow    = adjustStartPos(g.lastPosition.row - 2)
+		startCol    = adjustStartPos(g.lastPosition.col - 2)
+		endRow      = adjustEndPos(g.lastPosition.row + 2)
+		endCol      = adjustEndPos(g.lastPosition.col + 2)
+		checkedPart []Tile
+	)
+
+	row := startRow
+	col := startCol
+	for row <= endRow && col <= endCol {
+		checkedPart = append(checkedPart, g.playingBoard.matrix[row][col])
+		row++
+		col++
+	}
+
+	return g.checkBoardSlice(checkedPart)
 }
 
-func (g *Game) checkSideDiagonal() bool {
-	return false
+func (g *Game) checkAntiDiagonal() bool {
+	var (
+		startRow    = adjustStartPos(g.lastPosition.row - 2)
+		startCol    = adjustEndPos(g.lastPosition.col + 2)
+		endRow      = adjustEndPos(g.lastPosition.row + 2)
+		endCol      = adjustStartPos(g.lastPosition.col - 2)
+		checkedPart []Tile
+	)
+
+	row := startRow
+	col := startCol
+	for row <= endRow && col >= endCol {
+		checkedPart = append(checkedPart, g.playingBoard.matrix[row][col])
+		row++
+		col--
+	}
+
+	return g.checkBoardSlice(checkedPart)
 }
 
+// Checks if there was met any of win conditions after latest insertion.
 func (g *Game) checkWin() bool {
-	return g.checkHorizontal() || g.checkVertical() || g.checkMainDiagonal() || g.checkSideDiagonal()
+	return g.checkHorizontal() || g.checkVertical() || g.checkMainDiagonal() || g.checkAntiDiagonal()
 }
 
 func (g *Game) play() {
 	const maximumRounds = cellsPerSide * cellsPerSide
 	var roundCounter = 0
 
-	for roundCounter < maximumRounds && !g.isOver {
-		// TODO: Implement game logic
+	for roundCounter < maximumRounds && g.state == inProgress {
 		g.playingBoard.print()
 
 		g.handleInput()
-		g.switchPlayers()
+		if g.checkWin() {
+			break
+		}
 
-		//TODO: Implement check for win
+		g.switchPlayers()
 		roundCounter++
 	}
+
+	fmt.Println("We have a dub, boys, EPIC GAMER WIN")
 }
