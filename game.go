@@ -9,15 +9,24 @@ type Game struct {
 	player1       Player
 	player2       Player
 	currentPlayer Player
-	isOver        bool
+	state         State
+	lastPosition  Position
 }
+
+type State int
+
+const (
+	inProgress State = iota
+	player1Win State = iota
+	player2Win State = iota
+)
 
 func (g *Game) create() {
 	g.playingBoard.create()
 	g.player1.create(cross)
 	g.player2.create(circle)
 	g.currentPlayer = g.player1
-	g.isOver = false
+	g.state = inProgress
 }
 
 func (g *Game) switchPlayers() {
