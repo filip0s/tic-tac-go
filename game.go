@@ -19,6 +19,7 @@ const (
 	inProgress State = iota
 	player1Win State = iota
 	player2Win State = iota
+	tie        State = iota
 )
 
 func (g *Game) create() {
@@ -181,6 +182,15 @@ func (g *Game) checkWin() bool {
 	return g.checkHorizontal() || g.checkVertical() || g.checkMainDiagonal() || g.checkAntiDiagonal()
 }
 
+func (g *Game) handleWinState() {
+	if g.currentPlayer == g.player1 {
+		g.state = player1Win
+		return
+	}
+
+	g.state = player2Win
+}
+
 func (g *Game) play() {
 	const maximumRounds = cellsPerSide * cellsPerSide
 	var roundCounter = 0
@@ -190,12 +200,13 @@ func (g *Game) play() {
 
 		g.handleInput()
 		if g.checkWin() {
-			break
+			g.handleWinState()
+			return
 		}
 
 		g.switchPlayers()
 		roundCounter++
 	}
 
-	fmt.Println("We have a dub, boys, EPIC GAMER WIN")
+	g.state = tie
 }
