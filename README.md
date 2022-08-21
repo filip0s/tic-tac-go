@@ -7,7 +7,7 @@ Multiplayer game of Tic Tac Toe written in Go
 ![Screenshot of main menu and game](docs/game-screenshot.png)
 
 ## Release installation
-[Download executable](https://github.com/filip0s/tic-tac-go/releases/tag/v1.0.0) for your operating system and run it.
+[Download executable](https://github.com/filip0s/tic-tac-go/releases/) for your operating system and run it.
 
 ## Application setup for development
 ### Prerequisites
