@@ -6,10 +6,8 @@ build:
 	@if [ ! -d ${OUTPUT_FOLDER} ] ; then mkdir -p ${OUTPUT_FOLDER} ; fi
 	go build -o ${OUTPUT_TARGET} .
 
-
 run:
 	go run .
-
 
 compile:
 	@if [ ! -d ${OUTPUT_FOLDER} ] ; then mkdir -p ${OUTPUT_FOLDER} ; fi
@@ -20,3 +18,6 @@ compile:
 	GOOS=darwin GOARCH=arm64 go build -o ${OUTPUT_FOLDER}tic-tac-go-mac-arm64 .
 	GOOS=windows GOARCH=386 go build -o ${OUTPUT_FOLDER}tic-tac-go-win-i386.exe .
 	GOOS=windows GOARCH=amd64 go build -o ${OUTPUT_FOLDER}tic-tac-go-win-amd64.exe .
+
+clean:
+	rm -rf bin/
