@@ -18,5 +18,5 @@ compile:
 	GOOS=linux GOARCH=arm go build -o ${OUTPUT_FOLDER}tic-tac-go-linux-arm .
 	GOOS=darwin GOARCH=amd64 go build -o ${OUTPUT_FOLDER}tic-tac-go-mac-amd64 .
 	GOOS=darwin GOARCH=arm64 go build -o ${OUTPUT_FOLDER}tic-tac-go-mac-arm64 .
-	GOOS=windows GOARCH=386 go build -o ${OUTPUT_FOLDER}tic-tac-go-win-i386 .
-	GOOS=windows GOARCH=amd64 go build -o ${OUTPUT_FOLDER}tic-tac-go-win-amd64 .
+	GOOS=windows GOARCH=386 go build -o ${OUTPUT_FOLDER}tic-tac-go-win-i386.exe .
+	GOOS=windows GOARCH=amd64 go build -o ${OUTPUT_FOLDER}tic-tac-go-win-amd64.exe .
